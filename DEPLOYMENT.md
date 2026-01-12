@@ -4,9 +4,31 @@ This guide covers how to deploy your **Masters Application Tracker** to producti
 
 ## Option 1: Vercel (Recommended)
 
-Vercel is the easiest way to deploy Vite/React applications and offers excellent free tier performance.
+Vercel is the easiest way to deploy Vite/React applications and offers excellent free tier performance. You can deploy via the Web Dashboard or the CLI.
 
-### Steps:
+### Method A: Vercel CLI (Fastest)
+
+1.  **Run the deploy command**:
+    You can use `npx` to run Vercel without installing it globally.
+    ```bash
+    npx vercel
+    ```
+
+2.  **Follow the interactive prompts**:
+    *   **Set up and deploy?**: `y` (Yes)
+    *   **Which scope?**: Select your account (e.g., `manuvashistha`).
+    *   **Link to existing project?**: `n` (No)
+    *   **Project name?**: `manu-masters-portfolio` (or press Enter).
+    *   **In which directory?**: `./` (Press Enter).
+    *   **Want to modify these settings?**: `n` (No) - Vercel auto-detects Vite settings.
+
+3.  **Deploy to Production**:
+    The first command creates a "Preview" deployment. To push to production (main URL):
+    ```bash
+    npx vercel --prod
+    ```
+
+### Method B: Vercel Dashboard (Web UI)
 
 1.  **Push to GitHub**: Ensure your project is pushed to a GitHub repository.
     ```bash
@@ -50,43 +72,34 @@ Vercel is the easiest way to deploy Vite/React applications and offers excellent
 
 ---
 
-## Option 2: Firebase Hosting
+## Option 2: Firebase Hosting (Active)
 
-Since you are already using Firebase for the database, you can host the app there too.
+**Status**: ✅ Configured with GitHub Actions.
 
-### Steps:
+Your project is set up to automatically deploy to Firebase Hosting whenever you push to the `main` branch.
 
-1.  **Install Firebase CLI**:
+### How it works:
+1.  **Workflows**: Two GitHub Actions files were created in `.github/workflows/`.
+    *   `firebase-hosting-merge.yml`: Deploys to live site when merging to `main`.
+    *   `firebase-hosting-pull-request.yml`: Creates a preview URL when you open a Pull Request.
+2.  **Configuration**: Settings are in `firebase.json` and `.firebaserc`.
+3.  **Deployment**: Just commit and push your changes!
     ```bash
-    npm install -g firebase-tools
+    git add .
+    git commit -m "Update app"
+    git push origin main
     ```
 
-2.  **Login**:
-    ```bash
-    firebase login
-    ```
-
-3.  **Initialize Hosting**:
-    ```bash
-    firebase init hosting
-    ```
-    *   **Select Project**: Choose your existing project (`application-tracker-mv`).
-    *   **Public Directory**: Type `dist` (this is where Vite builds to).
-    *   **Configure as single-page app?**: Type `y` (Yes).
-    *   **Set up automatic builds and deploys with GitHub?**: `n` (No, for now).
-    *   **File dist/index.html already exists. Overwrite?**: `n` (No).
-
-4.  **Build the App**:
+### Manual Deployment (Optional)
+If you ever need to deploy manually without git:
+1.  Build the app:
     ```bash
     npm run build
     ```
-
-5.  **Deploy**:
+2.  Deploy:
     ```bash
     firebase deploy --only hosting
     ```
-
-6.  **Done**: The CLI will output your hosting URL.
 
 ---
 
