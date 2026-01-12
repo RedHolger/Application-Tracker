@@ -72,6 +72,7 @@ const Dashboard = () => {
     submitted: applications.filter(a => a.status === 'Submitted').length,
     accepted: applications.filter(a => a.status === 'Accepted').length,
     pendingFees: applications.filter(a => !a.feePaid && a.applicationFee > 0).length,
+    actionsRequired: applications.filter(a => a.actionRequired).length,
   };
 
   const openPortal = (url) => {
@@ -202,6 +203,17 @@ const Dashboard = () => {
               </div>
 
               <div className="space-y-3 mb-4">
+                {app.actionRequired && (
+                  <div className="bg-red-50 border border-red-200 rounded-md p-3 mb-3">
+                    <p className="text-xs font-bold text-red-800 flex items-center mb-1">
+                      <AlertTriangle className="h-3.5 w-3.5 mr-1" /> ACTION REQUIRED
+                    </p>
+                    <p className="text-sm text-red-700">
+                      {app.actionDetails || "Check portal for requirements"}
+                    </p>
+                  </div>
+                )}
+
                 {app.portalUrl && (
                    <button
                      onClick={() => openPortal(app.portalUrl)}
